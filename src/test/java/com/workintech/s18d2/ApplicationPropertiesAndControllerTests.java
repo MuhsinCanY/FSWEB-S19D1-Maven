@@ -38,6 +38,7 @@ class ApplicationPropertiesAndControllerTests {
 
     @Autowired
     private Environment env;
+
     @Autowired
     private MockMvc mockMvc;
 
