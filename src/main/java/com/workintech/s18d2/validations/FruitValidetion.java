@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 public class FruitValidetion {
 
     public static void checkId(Long id) {
-        if (id == null) {
-            throw new PlantException("id is null", HttpStatus.BAD_REQUEST);
+        if (id < 0) {
+            throw new PlantException("ID must be bigger than 0", HttpStatus.BAD_REQUEST);
         }
     }
 

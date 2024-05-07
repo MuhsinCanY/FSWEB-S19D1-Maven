@@ -3,11 +3,12 @@ package com.workintech.s18d2.repository;
 import com.workintech.s18d2.entity.Fruit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface FruitRepository extends JpaRepository<Fruit, Long> {
+public interface FruitRepository extends CrudRepository<Fruit, Long> {
 
     @Query("select f from Fruit f order by f.price desc")
     List<Fruit> getByPriceDesc();

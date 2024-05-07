@@ -3,42 +3,33 @@ package com.workintech.s18d2.services;
 import com.workintech.s18d2.entity.Fruit;
 import com.workintech.s18d2.exceptions.PlantException;
 import com.workintech.s18d2.repository.FruitRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.workintech.s18d2.validations.FruitValidetion;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
+@AllArgsConstructor
 public class FruitServiceImpl implements FruitService {
 
-    private FruitRepository fruitRepository;
-
-    @Autowired
-    public FruitServiceImpl(FruitRepository fruitRepository) {
-        this.fruitRepository = fruitRepository;
-    }
+    private final FruitRepository fruitRepository;
 
     @Override
     public Fruit save(Fruit fruit) {
-//        FruitValidation.checkAll(fruit.getId(), fruit.getName(), fruit.getPrice(),
-//                fruit.getFruitType());
+        FruitValidetion.checkName(fruit.getName());
+        FruitValidetion.checkPrice(fruit.getPrice());
+        FruitValidetion.checkFruitType(fruit.getFruitType());
         return fruitRepository.save(fruit);
     }
 
     @Override
     public Fruit getById(Long id) {
-        if (id < 0) {
-            throw new PlantException("ID must be bigger than 0", HttpStatus.BAD_REQUEST);
-        }
-        Optional<Fruit> fruit = fruitRepository.findById(id);
-        if (fruit.isPresent()) {
-            return fruit.get();
-        } else {
-            throw new PlantException("Plant not found given id: " + id, HttpStatus.BAD_REQUEST);
-        }
+        return fruitRepository.findById(id).orElseThrow(() -> new PlantException("Plant not found" +
+                " " +
+                "given id: " + id, HttpStatus.BAD_REQUEST));
     }
 
     @Override
@@ -54,8 +45,8 @@ public class FruitServiceImpl implements FruitService {
 
     @Override
     public Fruit update(Fruit fruit) {
-//        FruitValidation.checkAll(fruit.getId(), fruit.getName(), fruit.getPrice(),
-//                fruit.getFruitType());
+        FruitValidetion.checkAll(fruit.getId(), fruit.getName(), fruit.getPrice(),
+                fruit.getFruitType());
         return fruitRepository.save(fruit);
     }
 
